@@ -1,4 +1,3 @@
 export default function Page() {
-  return <p> setting page
-  </p>;
+  return <p>Friends</p>;
 }

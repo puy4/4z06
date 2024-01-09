@@ -3,6 +3,7 @@ import {
   WrenchIcon,
   HomeIcon,
   DocumentDuplicateIcon,
+  UsersIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -10,12 +11,13 @@ import clsx from 'clsx';
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
 const links = [
-  { name: 'Home', href: '/dashboard', icon: HomeIcon },
+  { name: 'Home', href: '/dashboard/', icon: HomeIcon },
   {
-    name: 'Game History',
+    name: 'Match History',
     href: '/dashboard/history',
     icon: DocumentDuplicateIcon,
   },
+  { name: 'Friends', href: '/dashboard/friends', icon: UsersIcon },
   { name: 'Settings', href: '/dashboard/settings', icon: WrenchIcon },
 ];
 
