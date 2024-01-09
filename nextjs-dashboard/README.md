@@ -1,5 +1,11 @@
-## Next.js App Router Course - Starter
+## Setup for development
 
-This is the starter template for the Next.js App Router Course. It contains the starting code for the dashboard application.
+⋅⋅*install npm and node.js https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
 
-For more information, see the [course curriculum](https://nextjs.org/learn) on the Next.js Website.
+⋅⋅* use `npm install` to install dependencies 
+⋅⋅*  then 
+ ```npm i
+ npm install mdi-react`
+ npm run build
+ npm run dev
+ ```
