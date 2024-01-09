@@ -7,7 +7,7 @@ import { Board } from '../../ui/Board';
 import { ChoosePlayer } from '../../ui/ChoosePlayer';
 import { WinnerModal } from '../../ui/WinnerModal';
 
-export default function page() {
+const Page: NextPage = () => {
   const [isX, setIsX] = useState<boolean>(true);
   const [newGame, setNewGame] = useState<boolean>(false);
   const [squares, setSqaures] = useState<Array<any>>(Array(9).fill(null));
@@ -118,3 +118,5 @@ export default function page() {
     </div>
   )
 }
+
+export default Page
