@@ -4,9 +4,8 @@
 
 * use `npm install` to install dependencies 
 *  then 
- ```
- &emsp; npm i
- &emsp; npm install mdi-react`
- &emsp; npm run build
- &emsp; npm run dev
- ```
+
+ &emsp; `npm i`
+ &emsp; `npm install mdi-react`
+ &emsp; `npm run build`
+ &emsp; `npm run dev`
