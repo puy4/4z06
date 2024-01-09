@@ -8,3 +8,5 @@
  &emsp; `npm i` \
  &emsp; `npm run build` \
  &emsp; `npm run dev` 
+ 
+learn more at https://nextjs.org/learn/dashboard-app
