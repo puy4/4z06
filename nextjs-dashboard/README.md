@@ -6,6 +6,5 @@
 * then 
 
  &emsp; `npm i` \
- &emsp; `npm install mdi-react` \
  &emsp; `npm run build` \
  &emsp; `npm run dev` 
