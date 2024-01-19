@@ -10,7 +10,7 @@ export default function Page() {
       </h1>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         
-          <Card title="ttt"  value= "Tic-Tac-Toe" type="available" link="app/ui/tictactoe" />
+          <Card title="ttt"  value= "Tic-Tac-Toe" type="available" link="./dashboard/tictactoe" />
           <Card title="Duodecimal Cribbage"  value= "Duodecimal Cribbage" type="unavailable" link="" />
 
       </div>
