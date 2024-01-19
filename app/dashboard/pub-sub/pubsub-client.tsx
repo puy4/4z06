@@ -41,7 +41,7 @@ function PubSubMessages() {
   }
 
   const publicFromServerHandler: MouseEventHandler = (_event: MouseEvent<HTMLButtonElement>) => {
-    fetch('/publish', {
+    fetch('../../publish', {
         'method': 'POST',
         'headers': {
             'content-type': 'application/json',
