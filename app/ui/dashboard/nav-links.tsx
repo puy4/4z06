@@ -19,6 +19,8 @@ const links = [
   },
   { name: 'Friends', href: '/dashboard/friends', icon: UsersIcon },
   { name: 'Settings', href: '/dashboard/settings', icon: WrenchIcon },
+  { name: 'auth_test', href: '/dashboard/authentication', icon: WrenchIcon },
+  { name: 'pubsub-test', href: '/dashboard/pub-sub', icon: WrenchIcon }
 ];
 
 export default function NavLinks() {

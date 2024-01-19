@@ -3,9 +3,9 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import React, { useState } from 'react';
-import { Board } from '../../ui/Board';
-import { ChoosePlayer } from '../../ui/ChoosePlayer';
-import { WinnerModal } from '../../ui/WinnerModal';
+import { Board } from '../../ui/tictactoe/Board';
+import { ChoosePlayer } from '../../ui/tictactoe/ChoosePlayer';
+import { WinnerModal } from '../../ui/tictactoe/WinnerModal';
 
 const Page: NextPage = () => {
   const [isX, setIsX] = useState<boolean>(true);
