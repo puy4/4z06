@@ -8,7 +8,7 @@ import Logger, { LogEntry } from '../../../components/logger';
 
 export default function PubSubClient() {
 
-  const client = new Ably.Realtime.Promise ({ authUrl: '/token', authMethod: 'POST' });
+  const client = new Ably.Realtime.Promise ({ authUrl: '../../token', authMethod: 'POST' });
 
   return (
     <AblyProvider client={ client }>
