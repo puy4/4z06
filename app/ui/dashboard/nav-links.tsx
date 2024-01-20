@@ -3,7 +3,7 @@ import {
   WrenchIcon,
   HomeIcon,
   DocumentDuplicateIcon,
-  UsersIcon
+  UsersIcon, KeyIcon, ChatBubbleLeftRightIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -17,10 +17,9 @@ const links = [
     href: '/dashboard/history',
     icon: DocumentDuplicateIcon,
   },
-  { name: 'Friends', href: '/dashboard/friends', icon: UsersIcon },
-  { name: 'Settings', href: '/dashboard/settings', icon: WrenchIcon },
-  { name: 'auth_test', href: '/dashboard/authentication', icon: WrenchIcon },
-  { name: 'pubsub-test', href: '/dashboard/pub-sub', icon: WrenchIcon }
+  { name: 'Friends', href: '/dashboard/presence', icon: UsersIcon },
+  { name: 'Settings', href: '/dashboard/settings', icon: WrenchIcon }
+  
 ];
 
 export default function NavLinks() {

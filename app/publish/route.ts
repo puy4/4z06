@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import * as Ably from "ably/promises"
+import { useUser } from '@auth0/nextjs-auth0/client';
 
 export async function POST(req: Request) {
   if (!process.env.ABLY_API_KEY) {

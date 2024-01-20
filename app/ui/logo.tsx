@@ -12,10 +12,6 @@ export default function Logo() {
     >
       <CardsPlayingOutlineIcon className="h-12 w-12 rotate-[0deg]" />
       <p className="text-text-xs  md:text-[44px]">4Z06 Group 16: Duodecimal Cribbage  </p>
-      <CardsClubIcon className="h-12 w-12 rotate-[0deg]" />
-      <CardsDiamondOutlineIcon className="h-12 w-12 rotate-[0deg]" />
-      <CardsHeartOutlineIcon className="h-12 w-12 rotate-[0deg] " />
-      <CardsSpadeIcon className="h-12 w-12 rotate-[0deg] " />
     </div>
   );
 }

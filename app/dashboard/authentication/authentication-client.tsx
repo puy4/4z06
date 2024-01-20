@@ -2,15 +2,20 @@
 'use client'
 import React from 'react'
 import { MouseEventHandler, MouseEvent, useState } from 'react'
-
+import { useUser } from '@auth0/nextjs-auth0/client';
 import * as Ably from 'ably'
 import Logger, { LogEntry } from '../../../components/logger'
 
 import { AblyProvider, useAbly, useConnectionStateListener } from 'ably/react'
 
 export default function Authentication() {
+  const { user, isLoading } = useUser();
+  
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-  const client = new Ably.Realtime.Promise ({ authUrl: '../../token', authMethod: 'POST' });
+  const client = new Ably.Realtime.Promise ({ authUrl: '../../token', authMethod: 'POST', recover: (_, cb) => { cb(true); } });
 
   return (
     <AblyProvider client={ client }>
@@ -51,12 +56,12 @@ const ConnectionStatus = () => {
   return (
     <>
       <div className="flex flex-col justify-start items-start gap-4 w-[752px] h-[124px]">
-        <div className="flex flex-row justify-start items-start gap-4 pt-6 pr-6 pb-6 pl-6 rounded-lg bg-blue-600 border-t border-b border-l border-r border-solid border h-[68px] min-w-[752px]">
-          <div className="font-jetbrains-mono text-sm min-w-[227px] whitespace-nowrap text-white text-opacity-100 leading-normal font-medium">
+        <div className="flex flex-row justify-start items-start gap-4 pt-6 pr-6 pb-6 pl-6 rounded-lg bg-grey-100 border-t border-b border-l border-r border-solid border h-[68px] min-w-[752px]">
+          <div className="font-jetbrains-mono text-sm min-w-[227px] whitespace-nowrap text-black text-opacity-100 leading-normal font-medium">
             connection status
-            <span className="text-zinc-200 text-opacity-100">&nbsp;</span>
+            <span className="text-black text-opacity-100">&nbsp;</span>
             =&nbsp;
-            <span className="text-white text-opacity-100">
+            <span className="text-green-800 text-opacity-100">
               {connectionState}
             </span>
           </div>
