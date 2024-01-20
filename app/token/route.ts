@@ -3,7 +3,8 @@ import * as Ably from "ably/promises";
 import { getSession } from '@auth0/nextjs-auth0';
 
 export async function POST(req: Request) {
-  const { user } = await getSession();
+  const session = await getSession();
+  const user = session?.user;
 
 
 
