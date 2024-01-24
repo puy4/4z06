@@ -1,3 +1,4 @@
+'use client';
 import type { NextPage } from 'next';
 import {
   NoSymbolIcon,
@@ -48,6 +49,7 @@ const Dashboard: NextPage = () => {
   }
   
   function Choose(){
+    
     return (
       <div>
       <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>

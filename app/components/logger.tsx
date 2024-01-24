@@ -5,11 +5,14 @@ import React from "react";
 
 export class LogEntry {
     public timestamp: string
+    public timemili: string
     public message: string
     public id: string
   
     constructor(message: string,id:string) {
       this.timestamp = new Date().toLocaleString()
+      const d = new Date();
+      this.timemili = `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}.${d.getMilliseconds()}`
       this.message = message
       this.id = id
     }
@@ -37,7 +40,7 @@ export class LogEntry {
               // Show the newest log entry at the top
               logEntries.map((logEntry: LogEntry) => {
                 return (
-                  <li key="logEntry" >
+                  <li key={logEntry.message+logEntry.timemili} >
                     <span className="font-jetbrains-mono text-sm min-w-[20px] whitespace-nowrap text-slate-500 text-opacity-100 leading-normal font-medium">{logEntry.timestamp}      {logEntry.id}</span>&nbsp;&nbsp;{logEntry.message}
                   </li>
                 )}
