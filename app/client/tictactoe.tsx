@@ -3,12 +3,13 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import React, { useState } from 'react';
-import { Board } from '../../ui/tictactoe/Board';
-import { ChoosePlayer } from '../../ui/tictactoe/ChoosePlayer';
-import { WinnerModal } from '../../ui/tictactoe/WinnerModal';
+import { Board } from '../ui/tictactoe/Board';
+import { ChoosePlayer } from '../ui/tictactoe/ChoosePlayer';
+import { WinnerModal } from '../ui/tictactoe/WinnerModal';
 
-const Page: NextPage = () => {
-  const [isX, setIsX] = useState<boolean>(true);
+
+const TicTacToe: NextPage = () => {
+  const [playerSymbol, setPlayerSymbol] = useState<string>('');
   const [newGame, setNewGame] = useState<boolean>(false);
   const [squares, setSqaures] = useState<Array<any>>(Array(9).fill(null));
 
@@ -16,11 +17,11 @@ const Page: NextPage = () => {
 
   // handle Choose player
   function handlePlayerX() {
-    setIsX(true);
+    setPlayerSymbol('X');
   }
 
   function handlePlayerO() {
-    setIsX(false);
+    setPlayerSymbol('O');
 
   }
 
@@ -31,13 +32,13 @@ const Page: NextPage = () => {
         return;
       }
   
-      squares[i] = isX ? "X" : "O";
+      squares[i] = playerSymbol=='X' ? "X" : "O";
       setSqaures(squares);
-      setIsX(!isX);
+      setPlayerSymbol('O');
     }
 
   function handleRestartGame() {
-    setIsX(true);
+    setPlayerSymbol('');
     setSqaures(Array(9).fill(null));
   }
 
@@ -45,13 +46,13 @@ const Page: NextPage = () => {
   // It will handle the start Game when the player choose one of the Icon
   // with which they want to player
   function handleNewGame() {
-    setIsX(true);
+    setPlayerSymbol('');
     setSqaures(Array(9).fill(null));
     setNewGame(true);
   };
 
   function handleQuitGame() {
-    setIsX(true);
+    setPlayerSymbol('');
     setSqaures(Array(9).fill(null));
     setNewGame(false);
   }
@@ -79,6 +80,7 @@ const Page: NextPage = () => {
     }
     return null;
   }
+
   
   return (
     <div className="flex min-h-screen bg-white flex-col items-center  py-2">
@@ -91,7 +93,6 @@ const Page: NextPage = () => {
         {" "}
         Toe
       </h1>
-
       {!newGame
         ?
         <ChoosePlayer
@@ -102,7 +103,7 @@ const Page: NextPage = () => {
         :
         <Board
           winner={winner}
-          playerX={isX}
+          playerX={playerSymbol=='X'}
           squares={squares}
           handlePlayer={handlePlayer}
           handleRestartGame={handleRestartGame}
@@ -119,4 +120,6 @@ const Page: NextPage = () => {
   )
 }
 
-export default Page
+
+
+export default TicTacToe

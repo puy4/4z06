@@ -6,8 +6,6 @@ export async function POST(req: Request) {
   const session = await getSession();
   const user = session?.user;
 
-
-
   if (!process.env.ABLY_API_KEY) {
     return NextResponse.json({ errorMessage: `Missing ABLY_API_KEY environment variable.
         If you're running locally, please ensure you have a ./.env file with a value for ABLY_API_KEY=your-key.
@@ -31,9 +29,8 @@ export async function POST(req: Request) {
       });
   }
 
-  const clientId = (  user?.nickname as string) || process.env.DEFAULT_CLIENT_ID || "NO_CLIENT_ID";
+  const clientId = (user?.nickname as string) || process.env.DEFAULT_CLIENT_ID || "NO_CLIENT_ID";
   const client = new Ably.Rest(process.env.ABLY_API_KEY);
-  const tokenRequestData = await client.auth.createTokenRequest({ clientId: clientId  });
-  console.log(tokenRequestData)
+  const tokenRequestData = await client.auth.createTokenRequest({ clientId: clientId });
   return NextResponse.json(tokenRequestData)
 }

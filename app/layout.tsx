@@ -1,3 +1,4 @@
+'use client';
 import '@/app/ui/global.css';
 import { poppins } from '@/app/ui/fonts';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
