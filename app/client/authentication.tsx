@@ -1,22 +1,19 @@
 "use client"
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { AblyProvider} from "ably/react"
-import * as Ably from 'ably'
+
 import Logo from '@/app/ui/logo';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import Image from 'next/image';
-import { PowerIcon } from '@heroicons/react/24/outline';
-import React, { useEffect, useState }  from 'react';
-import Dashboard  from './dashboard';
+
+import React from 'react';
+
 import type { NextPage } from 'next';
-import Logger , { LogEntry } from '../components/logger';
-import { useChannel } from "ably/react"
-import { MouseEventHandler, MouseEvent} from 'react'
+
 import Authenticated from './Authenticated';
 
 export default function Authentication() {
-  const { user, error, isLoading } = useUser();
+  const { user} = useUser();
 
 
   return (

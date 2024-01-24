@@ -13,31 +13,39 @@ import type { NextPage } from 'next';
 import Logger , { LogEntry } from '../components/logger';
 import { useChannel } from "ably/react"
 import { MouseEventHandler, MouseEvent} from 'react'
+import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Button} from "@nextui-org/react";
 
 export default function Authenticated() {
   const { user, error, isLoading } = useUser();
   const client = new Ably.Realtime.Promise ({ authUrl: '/token', authMethod: 'POST' });
 
+
   return (
     <AblyProvider client={client}>
+      <Navbar>
+      <NavbarBrand>
+        <p className="font-bold text-inherit">O|X</p>
+      </NavbarBrand>
+      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+        4z06: Cribbage
+      </NavbarContent>
+      <NavbarContent justify="end">
+        <NavbarItem>
+          <Button as={Link} href="/api/auth/logout" variant="flat">
+            Sign out
+          </Button>
 
-      <><Dashboard key="dashboard" /><Chat key="chat" /><SignOut key="signOut" /></>
+        </NavbarItem>
+      </NavbarContent>
+    </Navbar>
+
+      <><Dashboard key="dashboard" /><Chat key="chat" /></>
 
     </AblyProvider>
   )
 }
 
-const SignOut: NextPage  = () => {
-  return(         
-     <Link href="/api/auth/logout">
-  <button  className="flex h-[48px] w-[200px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3">
-    <PowerIcon className="w-6" />
-    <div className="hidden md:block">Sign Out</div>
-  </button>
-  </Link>
 
-    )
-}
 
 const Chat = () => {
 
@@ -64,6 +72,7 @@ const Chat = () => {
         <div className="flex flex-row justify-start items-start gap-4 w-[368px]">
           <div className="flex justify-center items-center rounded-md w-44 h-10 bg-blue-600">
             <div className="font-manrope text-base min-w-[136px] whitespace-nowrap text-white text-opacity-100 leading-4 font-medium">
+              
               <button onClick={publicFromClientHandler}>Send</button>
             </div>
           </div>
