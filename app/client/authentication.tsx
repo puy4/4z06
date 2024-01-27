@@ -22,7 +22,7 @@ const Authentication: NextPage  = () => {
           alt="NextUI hero Image"
           radius={`none`}
           />
-        <p className="font-bold text-inherit">4Z06</p>
+        <p className="font-bold text-inherit">4ZP6</p>
         </NavbarBrand>
           <NavbarContent className="sm:flex gap-4" justify="center">
             Multiplayer Realtime Cribbage
