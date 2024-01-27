@@ -1,24 +1,47 @@
 "use client"
 import { useUser } from '@auth0/nextjs-auth0/client';
-
-import Logo from '@/app/ui/logo';
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
-import Link from 'next/link';
 import Image from 'next/image';
-
 import React from 'react';
-
 import type { NextPage } from 'next';
-
 import Authenticated from './Authenticated';
-
-export default function Authentication() {
-  const { user} = useUser();
+import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Button} from "@nextui-org/react";
+import Link from 'next/link';
+import {Image as NextUIImage} from "@nextui-org/react";
+const Authentication: NextPage  = () => {
+  const { user, error, isLoading } = useUser();
 
 
   return (
+    <main className="min-h-screen">
+      <Navbar maxWidth={`full`}>
+        <NavbarBrand>
+          <NextUIImage
+          isBlurred={true}
+          src="/poker.svg"
+          width={25}
+          alt="NextUI hero Image"
+          radius={`none`}
+          />
+        <p className="font-bold text-inherit">4Z06</p>
+        </NavbarBrand>
+          <NavbarContent className="sm:flex gap-4" justify="center">
+            Multiplayer Realtime Cribbage
+          </NavbarContent>
+        <NavbarContent justify="end">
+          <NavbarItem>
+          {user ? 
+            (<Button as={Link} href="/api/auth/logout" variant="flat">
+              Log Out
+            </Button>):            (<Button as={Link} href="/api/auth/login" variant="flat">
+              Log In
+            </Button>)}
+          </NavbarItem>
+        </NavbarContent>
+      </Navbar>
 
-    user ? <Authenticated key="auth"/>:<UnAuth key="unauth" />
+    {user ? <Authenticated key="auth"/>:<UnAuth key="unauth" />}
+
+    </main>
 
 
   )
@@ -27,43 +50,25 @@ export default function Authentication() {
 
 const UnAuth: NextPage  = () => {
   return(    
-  <main className="flex min-h-screen flex-col p-6">
 
-  <div className="flex h-20 shrink-0 items-end rounded-lg bg-blue-600 p-4 md:h-52">
-    <Logo></Logo>
-  </div> 
-  <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
-    <div className="flex flex-col justify-center gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/5 md:px-20">
-      <Link
-        href="/api/auth/login"
-       
-        className="flex items-center gap-5 self-start rounded-lg bg-blue-600 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-400 md:text-base"
-      >
-        <span>Log in</span> <ArrowRightIcon className="w-5 md:w-6" />
-      </Link>
+    <div className="flex items-center flex-col flex-row">
+      <div className="py-12">
+
+        <Image
+          src="/poker2.svg"
+          width={600}
+          height={600}
+          className=""
+          alt=""
+        />
+
+
+
+      </div>
     </div>
-    <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
 
-      <Image
-        src="/poker2.svg"
-        width={500}
-        height={500}
-        className="hidden md:block"
-        alt="Screenshots of the dashboard project showing desktop version"
-
-      />
-    </div>
-      <Image
-        src="/poker.svg"
-        width={200}
-        height={200}
-        className="block md:hidden"
-        alt="Screenshot of the dashboard project showing mobile version"
-        priority  
-      />
-  </div>
-</main>
 
   )
 }
 
+export default Authentication;

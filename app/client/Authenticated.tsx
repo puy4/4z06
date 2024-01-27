@@ -1,45 +1,44 @@
 "use client"
-import { useUser } from '@auth0/nextjs-auth0/client';
+
 import { AblyProvider} from "ably/react"
 import * as Ably from 'ably'
-import Logo from '@/app/ui/logo';
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
-import Link from 'next/link';
-import Image from 'next/image';
-import { PowerIcon } from '@heroicons/react/24/outline';
+
+
 import React, { useState }  from 'react';
 import Dashboard  from './dashboard';
 import type { NextPage } from 'next';
-import Logger , { LogEntry } from '../components/logger';
+
 import { useChannel } from "ably/react"
 import { MouseEventHandler, MouseEvent} from 'react'
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Button} from "@nextui-org/react";
+import { Button, Textarea, Spacer, Listbox, ListboxItem, ScrollShadow, Divider} from "@nextui-org/react";
 
-export default function Authenticated() {
-  const { user, error, isLoading } = useUser();
+class LogEntry {
+  public timestamp: string
+  public timemili: string
+  public message: string
+  public id: string
+
+  constructor(message: string,id:string) {
+    this.timestamp = new Date().toLocaleString()
+    const d = new Date();
+    this.timemili = `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}.${d.getMilliseconds()}`
+    this.message = message
+    this.id = id
+  }
+}
+
+
+
+const Authenticated:NextPage = () => {
+
   const client = new Ably.Realtime.Promise ({ authUrl: '/token', authMethod: 'POST' });
-
 
   return (
     <AblyProvider client={client}>
-      <Navbar>
-      <NavbarBrand>
-        <p className="font-bold text-inherit">O|X</p>
-      </NavbarBrand>
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        4z06: Cribbage
-      </NavbarContent>
-      <NavbarContent justify="end">
-        <NavbarItem>
-          <Button as={Link} href="/api/auth/logout" variant="flat">
-            Sign out
-          </Button>
 
-        </NavbarItem>
-      </NavbarContent>
-    </Navbar>
-
-      <><Dashboard key="dashboard" /><Chat key="chat" /></>
+      <><Dashboard key="dashboard" />
+      <Divider className="my-12" />
+      <Chat key="chat" /></>
 
     </AblyProvider>
   )
@@ -52,7 +51,7 @@ const Chat = () => {
   const [logs, setLogs] = useState<Array<LogEntry>>([])
 
   const { channel} = useChannel("chat", (message: Ably.Types.Message) => {
-    setLogs(prev => [...prev, new LogEntry(`${message.data.text}`,`${message.clientId}: `)])
+    setLogs(prev => [new LogEntry(`${message.data.text}`,`${message.clientId}: `), ...prev])
   });
   const [messageText, setMessageText] = useState<string>('A message')
   const publicFromClientHandler: MouseEventHandler = (_event: MouseEvent<HTMLButtonElement>) => {
@@ -61,25 +60,62 @@ const Chat = () => {
     console.log(channel.name)
     
   }
+  const handleChange = (event:React.ChangeEvent<HTMLInputElement>) => {
+    setMessageText(event.target.value);
+};
 
   return (
-    <>
-      <div className="flex flex-col justify-start items-start gap-4 h-[138px]">
-        <div className="font-manrope text-sm min-w-[113px] whitespace-nowrap text-black text-opacity-100 leading-4 uppercase tracking-widest font-medium">
-          <span className="uppercase">Message text</span>
+    <div className="flex items-center flex-col flex-row">
+      
+
+      
+      <h1 className={`mb-4 text-xl md:text-2xl`}>
+          Chat 
+      </h1>
+
+      
+      <div className="flex flex-row space-x-16">
+        <div className="flex flex-col items-center">
+          <Textarea
+
+            variant="underlined"
+            placeholder="Enter your Message"
+            className="max-w-xs bg-transparent"
+            value={messageText}  
+            onChange={handleChange}
+          />
+          <Spacer x={4} />
+          <Button size='sm' onClick={publicFromClientHandler}>Send</Button>
         </div>
-        <input id="username"  autoComplete='A message' className="font-manrope px-3 rounded-md items-center text-base min-w-[720px] w-[752px] whitespace-nowrap text-zinc-800 text-opacity-100 leading-6 font-light h-12 border-zinc-300 border-solid border bg-neutral-100" value={messageText}  onChange={e => setMessageText(e.target.value)} />
-        <div className="flex flex-row justify-start items-start gap-4 w-[368px]">
-          <div className="flex justify-center items-center rounded-md w-44 h-10 bg-blue-600">
-            <div className="font-manrope text-base min-w-[136px] whitespace-nowrap text-white text-opacity-100 leading-4 font-medium">
+        <Spacer x={4} />
+
+      <ScrollShadow className="max-w-5xl min-w-[200px] max-h-[200px]">
+        <Listbox
+          emptyContent={`No messages.`}
+          variant="solid"
+          items={logs}
+          aria-label="Dynamic Actions"
+          onAction={(key) => alert(key)}
+          title='MESSAGES'
+        >
+          {
+          (item) => (
+            <ListboxItem
               
-              <button onClick={publicFromClientHandler}>Send</button>
-            </div>
-          </div>
-        </div>
+              key={item.message+item.timemili}
+              color={"default"} 
+              className={""}
+            >
+              <p className="text-xs text-green-600">{item.timestamp} {item.id}</p>{item.message}
+            </ListboxItem>
+          )}
+        </Listbox>
+      </ScrollShadow>
       </div>
-      <Logger logEntries={logs}  displayHeader={true}  />
-    </>
+    </div>
+
     
   )
 }
+
+export default Authenticated;

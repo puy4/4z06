@@ -1,12 +1,17 @@
-import React from 'react'
+"use client"
+import React, { useEffect, useState } from 'react'
 import { OIcon } from './OIcon'
 import { XIcon } from './XIcon'
+import { useAbly, useChannel} from "ably/react"
+import Ably from "ably"
+import { NullLiteral } from 'typescript'
 
 interface PlayerProp {
   winner:string,
-  playerX: boolean,
+  playerSymbol: string,
   squares: Array<any>,
   handlePlayer(i: number): void,
+  currentPlayer:string|null
   handleRestartGame(): void,
 }
 
@@ -15,15 +20,19 @@ interface SquareProp {
   onClick(): void,
 }
 
-export const Board = ({ winner, playerX, handlePlayer, handleRestartGame, squares }: PlayerProp) => {
-
+export const Board = ({ winner, playerSymbol, currentPlayer, handlePlayer, handleRestartGame, squares }: PlayerProp) => {
+  const [disable, setDisable] = useState(true);
+  useEffect(() => {
+    (winner && playerSymbol !== currentPlayer) ? setDisable(false) : setDisable(true);
+    }, [winner, playerSymbol !== currentPlayer]);
+    
   // Square Button and RenderSquare function
-  function Square({ value, onClick }: SquareProp) {
-    return (
-      <button className="square" onClick={onClick} disabled={winner ? true :false} >
-        {value}
-      </button>
-    )
+    function Square({ value, onClick}: SquareProp) {
+      return (
+        <button className="square" onClick={onClick} disabled={disable} >
+          {value}
+        </button>
+      )
 
   }
 
@@ -53,7 +62,7 @@ export const Board = ({ winner, playerX, handlePlayer, handleRestartGame, square
       <div className="board">
         <div className=" blue-400 w-[300px] md:[w-400px] rounded-lg flex items-center justify-center space-x-10">
           <div>
-            {playerX
+            {playerSymbol=='X'
               ?
               <div className="text-black bg-white text-xl px-4 py-1 w-28 rounded-lg font-medium uppercase">
                 <span className="text-black text-2xl font-bold">

@@ -1,51 +1,63 @@
 "use client"
-
 import type { NextPage } from 'next';
-
-import React, { MouseEventHandler, MouseEvent, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Board } from '../ui/Board';
-import { ChoosePlayer } from '../ui/ChoosePlayer';
 import { WinnerModal } from '../ui/WinnerModal';
-import { useAbly, useChannel} from "ably/react"
+import { useAbly } from "ably/react"
 import Ably from "ably"
 
-
-const TicTacToe: NextPage = () => {
-
-  interface Moves {
-    id: string;
-    step: string;
-    action: string;
+interface TicTacToeProps {
+  gameChannelName: string | null;
+}
 
 
-    // Add other properties as needed
+class GameData {
+  id: string;
+  type: string;
+  data: string;
+
+  constructor(id: string,type: string, data: string) {
+    this.id = id;
+    this.type = type;
+    this.data = data;
   }
-  const client = useAbly();
-  var gameChannel = client.channels.get('tictactoe:game');
+}
 
-  const { channel } = useChannel("tictactoe:game", (message: Ably.Types.Message) => {
-    //setLogs(prev => [...prev, new LogEntry(`✉️ event name: ${message.name} text: ${message.data.text}`)])
-  });
-  
-  const [messageText, setMessageText] = useState<string>('A message')
-
-  const publicFromClientHandler: MouseEventHandler = (_event: MouseEvent<HTMLButtonElement>) => {
-    if(channel === null) return
-    channel.publish('update-from-client', {text: `${messageText} @ ${new Date().toISOString()}`})
-  }
+const TicTacToe: NextPage<TicTacToeProps> = ({gameChannelName} ) => {
+  const ably=useAbly();
   const [playerSymbol, setPlayerSymbol] = useState<string>('');
   const [newGame, setNewGame] = useState<boolean>(false);
-  const [squares, setSqaures] = useState<Array<any>>(Array(9).fill(null));
+  const [squares, setSquares] = useState<Array<any>>(Array(9).fill(null));
+  const [currentPlayer, setCurrentPlayer] = useState<string|null>(null);
+  const [gameChannel, setGameChannel] = useState<Ably.Types.RealtimeChannelPromise | null>(null);
+  useEffect(() => {
+    if (gameChannelName) {
+      const gameChannel = ably.channels.get(gameChannelName);    
+      setGameChannel(gameChannel);};
+
+    const onMove = (message:Ably.Types.Message) => {
+      if (message.name === 'move') {
+        setSquares(message.data.squares);
+        setCurrentPlayer(message.data.nextPlayer);
+      }
+    };
+    gameChannel?.subscribe('move',onMove);
+
+    if (!currentPlayer) {
+      const firstPlayer = Math.random() < 0.5 ? 'X' : 'O';
+      setCurrentPlayer(firstPlayer);
+      gameChannel?.publish('move', { squares, nextPlayer: firstPlayer });
+    }
+
+    return () => {
+      gameChannel?.unsubscribe('move',onMove);
+    };
+  }, [gameChannelName, currentPlayer]);
+  
 
   let winner = calculateWinner(squares);
-
-  function handleChoosePlayer() {
-    
-  }
-
   // handle Choose player
   function handlePlayerX() {
-
     setPlayerSymbol('X');
   }
 
@@ -62,26 +74,38 @@ const TicTacToe: NextPage = () => {
       }
   
       squares[i] = playerSymbol=='X' ? "X" : "O";
-      setSqaures(squares);
-      setPlayerSymbol('O');
+      setSquares(squares);
+      if(playerSymbol=='X'){setPlayerSymbol('O');}
+      else{setPlayerSymbol('X');}
     }
 
   function handleRestartGame() {
-    setSqaures(Array(9).fill(null));
+    setSquares(Array(9).fill(null));
   }
+  
+  const handlePlayerMove = (index:number) => {
+    if (squares[index] || currentPlayer !== ably.auth.clientId) return; // Example condition: only 'X' can play
+    const newSquares = [...squares];
+    newSquares[index] = currentPlayer;
+    setSquares(newSquares);
+    const nextPlayer = currentPlayer === 'X' ? 'O' : 'X';
+    setCurrentPlayer(nextPlayer);
+    gameChannel?.publish('move', { squares: newSquares, nextPlayer });
+  };
+
 
 
   // It will handle the start Game when the player choose one of the Icon
   // with which they want to player
   function handleNewGame() {
-    setPlayerSymbol('');
-    setSqaures(Array(9).fill(null));
+    setPlayerSymbol('X');
+    setSquares(Array(9).fill(null));
     setNewGame(true);
   };
 
   function handleQuitGame() {
     setPlayerSymbol('');
-    setSqaures(Array(9).fill(null));
+    setSquares(Array(9).fill(null));
     setNewGame(false);
   }
   // Calculate the winner
@@ -121,24 +145,18 @@ const TicTacToe: NextPage = () => {
         {" "}
         Toe
       </h1>
-      {!newGame
-        ?
-        <ChoosePlayer
-          handleNewGame={handleNewGame}
-          handlePlayerX={handlePlayerX}
-          handlePlayerO={handlePlayerO}
-        />
-        :
+
         <Board
           winner={winner}
-          playerX={playerSymbol=='X'}
+          playerSymbol={playerSymbol}
+          currentPlayer={currentPlayer}
           squares={squares}
-          handlePlayer={handlePlayer}
+          handlePlayer={handlePlayerMove}
           handleRestartGame={handleRestartGame}
         />
-      }
+
       {winner && 
-      <WinnerModal
+        <WinnerModal
           winner={winner}
           handleQuitGame={handleQuitGame}
           handleNewGame={handleNewGame}

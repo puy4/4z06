@@ -1,16 +1,35 @@
-import React from 'react'
+"use client"
+
+import React, { useState } from 'react'
 import { OIcon } from './OIcon'
 import { XIcon } from './XIcon'
-
+import { useAbly, useChannel} from "ably/react"
 
 
 interface PlayerProp {
+  handleNewGame(): void,
   handlePlayerX(): void,
   handlePlayerO(): void,
-  handleNewGame(): void,
+
 }
 
-export const ChoosePlayer = ({handlePlayerX, handleNewGame, handlePlayerO }: PlayerProp) => {
+
+export const ChoosePlayer = ({ handlePlayerX,handlePlayerO,handleNewGame}: PlayerProp) => {
+
+  const client = useAbly();
+  const gameChannel = client.channels.get('tictactoe:game');
+
+  function  handleChooseX(): void {
+    if(gameChannel === null) return
+    gameChannel.publish('choice', 'X');
+    handlePlayerX();
+  }
+
+  function  handleChooseO(): void {
+      if(gameChannel === null) return;
+      gameChannel.publish('choice', 'O');
+      handlePlayerO();
+    }
 
 
   return (
@@ -29,10 +48,10 @@ export const ChoosePlayer = ({handlePlayerX, handleNewGame, handlePlayerO }: Pla
           <span className="text-black text-xl font-bold">O</span>
         </p>        <p className="text-md text-black uppercase  md:text-s "> (X goes first)</p>
         <div className="w-3/4 bg-blue-600  flex items-center justify-evenly h-24 rounded-2xl p-6 ">
-          <button onClick={handlePlayerX} className="focus:bg-blue-400 hover:bg-blue-400 trasnsition duartion-300 ease-in flex items-center justify-center rounded-xl px-6 py-2 ">
+          <button onClick={handleChooseX} className="focus:bg-blue-400 hover:bg-blue-400 trasnsition duartion-300 ease-in flex items-center justify-center rounded-xl px-6 py-2 ">
             <XIcon />
           </button>
-          <button onClick={handlePlayerO} className="focus:bg-blue-400 hover:bg-blue-400 trasnsition duartion-300 ease-in flex items-center justify-center rounded-xl px-6 py-2 " >
+          <button onClick={handleChooseO} className="focus:bg-blue-400 hover:bg-blue-400 trasnsition duartion-300 ease-in flex items-center justify-center rounded-xl px-6 py-2 " >
             <OIcon />
           </button>
         </div>

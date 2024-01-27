@@ -8,7 +8,8 @@ const config: Config = {
       // single component styles
       "./node_modules/@nextui-org/theme/dist/components/button.js", 
       // or you can use a glob pattern (multiple component styles)
-      './node_modules/@nextui-org/theme/dist/components/(button|snippet|code|input).js'
+      './node_modules/@nextui-org/theme/dist/components/(button|snippet|code|input).js',
+      "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -31,6 +32,7 @@ const config: Config = {
       },
     },
   },
+  darkMode:"class",
   plugins: [require('@tailwindcss/forms'),nextui()],
 };
 export default config;

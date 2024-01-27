@@ -1,7 +1,14 @@
 'use client';
 
 import React from "react";
+import {
+  Listbox,
+  ListboxSection,
+  ListboxItem,
+  Spacer,
+  Code
 
+} from "@nextui-org/react";
 
 export class LogEntry {
     public timestamp: string
@@ -25,31 +32,35 @@ export class LogEntry {
   
   export default function Logger({ logEntries, displayHeader }: LoggingProps) {
     return (
-      <div className="flex flex-col justify-start items-start gap-4">
-        { displayHeader &&
-        <div className="font-manrope text-sm min-w-[108px] whitespace-nowrap text-black text-opacity-100 leading-4 uppercase tracking-widest font-medium">
-          <span className="uppercase">Message log</span>
-        </div>
-        }
-        <div className="flex flex-col justify-start items-start rounded-lg bg-white">
-  
-          <div className="flex flex-col-reverse justify-start items-start gap-4 pt-6 pr-6 pb-6 pl-6 w-[752px] max-h-60 overflow-y overflow-x-scroll scrollbar ">
-            <div className="font-jetbrains-mono text-sm  text-rose-400 text-opacity-100 leading-normal font-medium">
-            <ul>
-            {
-              // Show the newest log entry at the top
-              logEntries.map((logEntry: LogEntry) => {
-                return (
-                  <li key={logEntry.message+logEntry.timemili} >
-                    <span className="font-jetbrains-mono text-sm min-w-[20px] whitespace-nowrap text-slate-500 text-opacity-100 leading-normal font-medium">{logEntry.timestamp}      {logEntry.id}</span>&nbsp;&nbsp;{logEntry.message}
-                  </li>
-                )}
-              )
-            }
-            </ul>
-            </div>
-          </div>
-        </div>
+        
+      <div className=" ">
+        
+        {/*<>MESSAGES</>
+        <Listbox
+          variant="solid"
+          items={logEntries}
+          aria-label="Dynamic Actions"
+          onAction={(key) => alert(key)}
+        >
+          {(item) => (
+            <ListboxItem
+              
+              key={item.message+item.timemili}
+              color={"default"}
+              className={""}
+            >
+              {item.timestamp}      {item.id}&nbsp;&nbsp;{item.message}
+            </ListboxItem>
+          )}
+        </Listbox>*/}
+
+
+ 
+
+
+
+
       </div>
+
     )
   }

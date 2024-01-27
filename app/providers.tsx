@@ -1,9 +1,10 @@
 'use client';
 
 import '@/app/ui/global.css';
-import { poppins } from '@/app/ui/fonts';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 import { NextUIProvider } from "@nextui-org/react";
+import {ThemeProvider as NextThemesProvider} from "next-themes";
+import React from 'react';
 
 
 export function Providers({
@@ -11,7 +12,9 @@ export function Providers({
 }: {
   children: React.ReactNode
 }) {
-  return <NextUIProvider><UserProvider>{children}</UserProvider></NextUIProvider >;
+  return <UserProvider><NextUIProvider><NextThemesProvider attribute="class" defaultTheme="dark">
+    {children}
+    </NextThemesProvider></NextUIProvider></UserProvider>;
 
 
 }
