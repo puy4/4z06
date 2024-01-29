@@ -1,6 +1,6 @@
 "use client";
 
-import {Switch, SwitchProps, VisuallyHidden, useSwitch} from "@nextui-org/react";
+import {SwitchProps, VisuallyHidden, useSwitch} from "@nextui-org/react";
 import {useTheme} from "next-themes";
 import {SunIcon,MoonIcon} from "@heroicons/react/24/outline"
 import { useEffect, useState } from "react";
@@ -23,7 +23,7 @@ export const ThemeSwitcher = (props:SwitchProps) => {
   const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
-    isSelected?(setTheme('light')):(setTheme('dark'))
+    isSelected?(setTheme('dark')):(setTheme('light'))
   }, [isSelected])
 
 
@@ -40,8 +40,8 @@ export const ThemeSwitcher = (props:SwitchProps) => {
   return (
 
 
-    <div >
-      <Component {...getBaseProps()} 
+    <div className="flex flex-col">
+      <Component {...getBaseProps()} className="bg-background"
       >
           <VisuallyHidden>
             <input {...getInputProps()} />
@@ -52,12 +52,11 @@ export const ThemeSwitcher = (props:SwitchProps) => {
               class: [
                 "w-8 h-8",
                 "flex items-center justify-center",
-                "rounded-lg bg-background " 
+                "rounded-lg bg-background",   
               ],
-            })}      
+            })}
           >
-            {isSelected ? <SunIcon/> : <MoonIcon/>}
-
+            {isSelected ? <MoonIcon/>:<SunIcon/>}
           </div>
       </Component>
 

@@ -1,12 +1,16 @@
 'use client';
-import { ScrollShadow, User } from "@nextui-org/react";
+import { Link, ScrollShadow, User } from "@nextui-org/react";
 import type { NextPage } from 'next';
 import {
   PlayIcon
 } from '@heroicons/react/24/outline';
 
 import React,{ useState } from 'react';
-
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
 import WaitRoom from './waitroom';
 
 import {Button} from "@nextui-org/react";
@@ -30,36 +34,42 @@ const Dashboard: NextPage<DashboardProps> = ({gameSelected,setGame}) => {
       
 
           <ScrollShadow orientation="horizontal" className="md:max-w-[500px] max-w-[300px] flex flex-row space-x-16">
-          <User   
-            name="Tic-Toc-Toe"
-            description={(
-            <Button size="sm" onClick={() => setGame("tictactoe")} className="" >
-              <PlayIcon height={15}/> PLAY NOW
-            </Button>)}
-            avatarProps={{
-              src: "/tic.svg"
-            }}
-          />
-          <User   
-            name="Cribbage"
-            description={(
-            <Button size="sm" onClick={() => setGame("cribbage")} className="" >
-              <PlayIcon height={20}/> PLAY NOW
-            </Button>)}
-            avatarProps={{
-              src: "/tic.svg"
-            }}
-          />
-                    <User   
-            name="Tic-Toc-Toe offline"
-            description={(
-            <Button size="sm" onClick={() => setGame("cribbage")} className="" >
-              <PlayIcon height={20}/> PLAY NOW
-            </Button>)}
-            avatarProps={{
-              src: "/tic.svg"
-            }}
-          />
+            <Box sx={{ minWidth: 275 }}>
+              <CardContent>
+                <p className=" text-4xl ">
+                    Tic-Toc-Toe
+                  </p>
+                  <Link onPress={()=>(null)} >
+                    <p className=" text-sm font-bold  text-zinc-600 dark:text-zinc-300">
+                    rules
+                    </p>
+                  </Link >
+
+              </CardContent>
+              <CardActions>
+                <Button size="sm"  onClick={() => setGame("tictactoe")} className="" > 
+                <PlayIcon height={15}/>
+                PLAY NOW</Button>
+              </CardActions>
+            </Box>
+
+            <Box sx={{ minWidth: 275 }}>
+              <CardContent>
+                  <p className=" text-4xl ">
+                    Cribbage
+                  </p>
+                  <Link onPress={()=>(null)}>
+                    <p className=" text-sm font-bold  text-zinc-600 dark:text-zinc-300">
+                    rules
+                    </p>
+                  </Link >
+              </CardContent>
+              <CardActions>
+                <Button size="sm"  onClick={() => setGame("tictactoe")} className="" > 
+                <PlayIcon height={15}/>
+                PLAY NOW</Button>
+              </CardActions>
+            </Box>
 
             </ScrollShadow>
       </div>)
@@ -79,6 +89,7 @@ const Dashboard: NextPage<DashboardProps> = ({gameSelected,setGame}) => {
     </div>
   );
 }
+
 
 
 export default Dashboard

@@ -27,7 +27,7 @@ const Lobby: NextPage<LobbyProps>= ({setSymbol,setPlayersReady,playersReady,onEn
   const ably = useAbly();
   const lobbyChannel = ably.channels.get('tictactoe:lobby');
 
-function channelPres() { 
+function fetchLobbypresence() { 
     lobbyChannel.presence.get()
     .then(presenceData => {
       console.log("Presence Data:", presenceData[0].clientId);
@@ -44,14 +44,14 @@ function channelPres() {
   useEffect(() => {
     {
       const interval = setInterval(() => {
-        channelPres()
-      }, 60000);
+        fetchLobbypresence()
+      }, 60*1000);  //fetch data every 60 seconds
       return () => clearInterval(interval);
 
     }}, [playersReady]);
   */}
   const updateLobby = () => {
-      channelPres();
+    fetchLobbypresence();
     };
 
   function handleCreateRoom(){
@@ -114,10 +114,10 @@ function channelPres() {
 
       {isRoomCreator?
       (playersReady?
-      (<h3 className="text-red-600">A player has joined your room, click &apos;Start&apos; to start the game</h3>):
-      (<h3 className="text-red-600">Room Created, Awaiting Opponent</h3>)):(
+      (<h3 className="text-red-600 dark:text-red-300">A player has joined your room, click &apos;Start&apos; to start the game</h3>):
+      (<h3 className="text-red-600 dark:text-red-300">Room Created, Awaiting Opponent</h3>)):(
       playersReady?
-      (<h3 className="text-red-600">Room joined, click &apos;Start&apos; to start the game</h3>):(null))}
+      (<h3 className="text-red-600 dark:text-red-300">Room joined, click &apos;Start&apos; to start the game</h3>):(null))}
       <div className="space-y-4 ">
       <div  className="space-x-4   flex flex-row justify-center">
       <Button size="sm"  onClick={()=>updateLobby()}>Update Lobby</Button>
@@ -125,8 +125,7 @@ function channelPres() {
       <Button size="sm" isDisabled={playersReady?false:true} onClick={()=>handleStartGame()}>Start</Button>
       </div >
       <div className="flex flex-col justify-center">
-
-      <p className=" text-lg font-extrabold text-center text-red-600">&#42;&#42;&#42;due to budget constraints, please use the &apos;update lobby&apos; button to update lobby manually.&#42;&#42;&#42;</p>
+      <p className=" text-lg font-extrabold text-center text-red-600 dark:text-red-300">&#42;&#42;&#42;due to budget constraints, please use the &apos;update lobby&apos; button to update lobby manually.&#42;&#42;&#42;</p>
       </div>
       </div>
     </div>)

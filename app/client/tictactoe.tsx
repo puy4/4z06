@@ -26,15 +26,16 @@ class GameData {
 
 const TicTacToe: NextPage<TicTacToeProps> = ({ symbol,gameChannelName }) => {
 
+
   const ably=useAbly();
   const [playerSymbol, setPlayerSymbol] = useState<string>('');
   const [newGame, setNewGame] = useState<boolean>(false);
   const [squares, setSquares] = useState<Array<any>>(Array(9).fill(null));
   const [currentPlayer, setCurrentPlayer] = useState<string|null>(null);
   const [gameChannel, setGameChannel] = useState<Ably.Types.RealtimeChannelPromise | null>(null);
-
+  let winner = calculateWinner(squares);
+  
   useEffect(() => {
-
     if (gameChannelName) {
       const gameChannel = ably.channels.get(gameChannelName);    
       setGameChannel(gameChannel);};
@@ -62,8 +63,6 @@ const TicTacToe: NextPage<TicTacToeProps> = ({ symbol,gameChannelName }) => {
       gameChannel?.unsubscribe('move',onMove);
     };
   }, [gameChannelName, currentPlayer]);
-  
-  let winner = calculateWinner(squares);
 
   const handlePlayerMove = (index:number) => {
     if (squares[index] || currentPlayer !== playerSymbol) return; // Example condition: only 'X' can play

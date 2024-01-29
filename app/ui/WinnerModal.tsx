@@ -1,7 +1,5 @@
-import React, { useEffect } from 'react'
-import { OIcon } from './OIcon';
-import { XIcon } from './XIcon'
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react';
+import React from 'react'
+import { Button, Modal, ModalContent, ModalFooter, ModalHeader } from '@nextui-org/react';
 
 interface GameProps{
   winner:string
@@ -10,7 +8,7 @@ interface GameProps{
   handleRestartGame():void;
 }
 
-export const WinnerModal = ({winner, handleQuitGame, handleNewGame, handleRestartGame} :GameProps) => {
+export const WinnerModal = ({winner, handleQuitGame, handleRestartGame} :GameProps) => {
   const [show, setShow] = React.useState(false);
 
 
@@ -37,24 +35,20 @@ export const WinnerModal = ({winner, handleQuitGame, handleNewGame, handleRestar
             <>
               <ModalHeader className="justify-center">
                 WINNER IS
-              </ModalHeader>
-
-
-                 {winner === "X" ? (<p className='text-8xl text-center'>X</p>):
-                 ( <p className='text-8xl text-center'>O</p>) } 
-
-
-              <ModalFooter className='w-full flex flex-row items-center justify-between'>
-                <Button variant="light" onPress={OK} >
-                  OK
-                </Button>
-                <Button variant="light" onPress={restart} >
-                  Play Another
-                </Button>
+                  </ModalHeader>
+                    {winner === "X" ? (<p className='text-8xl text-center'>X</p>):
+                    ( <p className='text-8xl text-center'>O</p>) } 
+                  <ModalFooter className='w-full flex flex-row items-center justify-between'>
+                  <Button variant="light" onPress={OK} >
+                    OK
+                  </Button>
+                  <Button variant="light" onPress={restart} >
+                    Play Another
+                  </Button>
               </ModalFooter>
             </>
           </ModalContent>
         </Modal>
-        </>
+      </>
   )
 }

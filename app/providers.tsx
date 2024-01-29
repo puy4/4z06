@@ -8,7 +8,6 @@ import React from 'react';
 
 
 
-
 export function Providers({
   children,
 }: {
@@ -17,11 +16,12 @@ export function Providers({
   return (
     <>
 
-    <UserProvider><NextUIProvider><NextThemesProvider attribute="class" themes={['dark','light']}>
+    <UserProvider><NextUIProvider><NextThemesProvider defaultTheme='light' attribute="class" themes={['dark','light']}>
       
     {children}
     </NextThemesProvider></NextUIProvider></UserProvider>
     </>   
+
     )
 
 

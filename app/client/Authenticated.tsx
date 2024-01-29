@@ -17,7 +17,7 @@ interface AuthenticatedProps {
   gameSelected:string
 }
 
-class LogEntry {
+class MessageEntry {
   public timestamp: string
   public timemili: string
   public message: string
@@ -53,10 +53,10 @@ const Authenticated:NextPage<AuthenticatedProps> = ({setGame,gameSelected}) => {
 
 const Chat = () => {
 
-  const [logs, setLogs] = useState<Array<LogEntry>>([])
+  const [messages, setMessages] = useState<Array<MessageEntry>>([])
 
   const { channel} = useChannel("chat", (message: Ably.Types.Message) => {
-    setLogs(prev => [new LogEntry(`${message.data.text}`,`${message.clientId}: `), ...prev])
+    setMessages(prev => [new MessageEntry(`${message.data.text}`,`${message.clientId}: `), ...prev])
   });
   const [messageText, setMessageText] = useState<string>('A message')
   const publicFromClientHandler: MouseEventHandler = (_event: MouseEvent<HTMLButtonElement>) => {
@@ -71,14 +71,9 @@ const Chat = () => {
 
   return (
     <div className="flex items-center flex-col flex-row">
-      
-
-      
       <h1 className={`mb-4 text-xl md:text-2xl`}>
-          Chat 
+        Chat 
       </h1>
-
-      
       <div className="flex flex-row space-x-16">
         <div className="flex flex-col items-center">
           <Textarea
@@ -98,7 +93,7 @@ const Chat = () => {
         <Listbox
           emptyContent={`No messages.`}
           variant="solid"
-          items={logs}
+          items={messages}
           aria-label="Dynamic Actions"
           onAction={(key) => alert(key)}
           title='MESSAGES'
@@ -111,7 +106,7 @@ const Chat = () => {
               color={"default"} 
               className={""}
             >
-              <p className="text-xs text-green-600">{item.timestamp} {item.id}</p>{item.message}
+              <p className="text-xs text-green-600 dark:text-green-300">{item.timestamp} {item.id}</p>{item.message}
             </ListboxItem>
           )}
         </Listbox>
