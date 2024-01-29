@@ -4,13 +4,18 @@ import { AblyProvider} from "ably/react"
 import * as Ably from 'ably'
 
 
-import React, { useState }  from 'react';
+import React, { Dispatch, SetStateAction, useState }  from 'react';
 import Dashboard  from './dashboard';
 import type { NextPage } from 'next';
 
 import { useChannel } from "ably/react"
 import { MouseEventHandler, MouseEvent} from 'react'
 import { Button, Textarea, Spacer, Listbox, ListboxItem, ScrollShadow, Divider} from "@nextui-org/react";
+
+interface AuthenticatedProps {
+  setGame: React.Dispatch<React.SetStateAction<string>>
+  gameSelected:string
+}
 
 class LogEntry {
   public timestamp: string
@@ -29,14 +34,14 @@ class LogEntry {
 
 
 
-const Authenticated:NextPage = () => {
+const Authenticated:NextPage<AuthenticatedProps> = ({setGame,gameSelected}) => {
 
   const client = new Ably.Realtime.Promise ({ authUrl: '/token', authMethod: 'POST' });
 
   return (
     <AblyProvider client={client}>
 
-      <><Dashboard key="dashboard" />
+      <><Dashboard setGame={setGame} gameSelected={gameSelected} key="dashboard" />
       <Divider className="my-12" />
       <Chat key="chat" /></>
 

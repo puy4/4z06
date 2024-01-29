@@ -1,15 +1,17 @@
 "use client"
 import { useUser } from '@auth0/nextjs-auth0/client';
 import Image from 'next/image';
-import React from 'react';
+import React, { useState } from 'react';
 import type { NextPage } from 'next';
 import Authenticated from './Authenticated';
 import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Button} from "@nextui-org/react";
 import Link from 'next/link';
 import {Image as NextUIImage} from "@nextui-org/react";
+import { ThemeSwitcher } from '../components/ThemeSwitcher';
+
 const Authentication: NextPage  = () => {
   const { user, error, isLoading } = useUser();
-
+  const [gameSelected, setGame] = useState("");
 
   return (
     <main className="min-h-screen">
@@ -25,21 +27,29 @@ const Authentication: NextPage  = () => {
         <p className="font-bold text-inherit">4ZP6</p>
         </NavbarBrand>
           <NavbarContent className="sm:flex gap-4" justify="center">
-            Multiplayer Realtime Cribbage
+
+            <Button variant='light' isDisabled={gameSelected==""} onClick={()=>setGame("")}>
+            Cribbage
+            </Button>
+            
           </NavbarContent>
         <NavbarContent justify="end">
           <NavbarItem>
           {user ? 
-            (<Button as={Link} href="/api/auth/logout" variant="flat">
+            (<Button as={Link} variant='light' size='sm' href="/api/auth/logout" >
               Log Out
-            </Button>):            (<Button as={Link} href="/api/auth/login" variant="flat">
+            </Button>):  (<Button variant='light' size='sm' as={Link} href="/api/auth/login" >
               Log In
             </Button>)}
           </NavbarItem>
+          <NavbarItem>
+          <ThemeSwitcher/>
+          </NavbarItem>
+
         </NavbarContent>
       </Navbar>
-
-    {user ? <Authenticated key="auth"/>:<UnAuth key="unauth" />}
+      
+    {user ? <Authenticated setGame={setGame} gameSelected={gameSelected} key="auth"/>:<UnAuth key="unauth" />}
 
     </main>
 

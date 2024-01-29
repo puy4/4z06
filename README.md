@@ -1,12 +1,17 @@
-## Setup for development
+# Capstone  
+live demo: [4z06.vercel.app](https://4z06.vercel.app)
+username: {macid}@mcmaster.ca    
+password: Testing123
 
-* install latest npm and node.js https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
+## install npm and node.js 
+https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
 
-* use `npm install` to install dependencies 
-* then 
+## dependencies
+npm install
+npm i
+npm run build
+npm run dev
 
- &emsp; `npm i` \
- &emsp; `npm run build` \
- &emsp; `npm run dev` 
- 
-learn more at https://nextjs.org/learn/dashboard-app
+[ably](https://ably.com/)
+[vercel](https://vercel.com/home)
+[auth0](https://auth0.com/)

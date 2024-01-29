@@ -1,5 +1,5 @@
 'use client';
-import {Card, CardHeader, CardBody, CardFooter, Divider, ScrollShadow, User} from "@nextui-org/react";
+import { ScrollShadow, User } from "@nextui-org/react";
 import type { NextPage } from 'next';
 import {
   PlayIcon
@@ -8,13 +8,15 @@ import {
 import React,{ useState } from 'react';
 
 import WaitRoom from './waitroom';
-import Image from 'next/image';
+
 import {Button} from "@nextui-org/react";
 
-const Dashboard: NextPage = () => {
+interface DashboardProps {
+  setGame: React.Dispatch<React.SetStateAction<string>>
+  gameSelected:string
+}
 
-  const [Game, setGame] = useState("");
-
+const Dashboard: NextPage<DashboardProps> = ({gameSelected,setGame}) => {
 
   
   function Choose(){
@@ -27,7 +29,7 @@ const Dashboard: NextPage = () => {
       </h1>
       
 
-          <ScrollShadow orientation="horizontal" className="max-w-[500px] flex flex-row space-x-16">
+          <ScrollShadow orientation="horizontal" className="md:max-w-[500px] max-w-[300px] flex flex-row space-x-16">
           <User   
             name="Tic-Toc-Toe"
             description={(
@@ -48,23 +50,29 @@ const Dashboard: NextPage = () => {
               src: "/tic.svg"
             }}
           />
+                    <User   
+            name="Tic-Toc-Toe offline"
+            description={(
+            <Button size="sm" onClick={() => setGame("cribbage")} className="" >
+              <PlayIcon height={20}/> PLAY NOW
+            </Button>)}
+            avatarProps={{
+              src: "/tic.svg"
+            }}
+          />
 
             </ScrollShadow>
-
-            <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
-              {}
-            </div>  
       </div>)
   };
 
 
   return (
     <div> 
-    {Game=="" && <Choose/>}
-    {Game=="tictactoe"&& <><WaitRoom/>
+    {gameSelected=="" && <Choose/>}
+    {gameSelected=="tictactoe"&& <><WaitRoom/>
     <div className="flex justify-center">
             <div className="">
-    <Button size="sm" color="danger" onPress={()=>setGame("")}>Back to game selection</Button>
+
     </div>
     </div>
     </>}

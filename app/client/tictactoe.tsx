@@ -5,11 +5,12 @@ import { Board } from '../ui/Board';
 import { WinnerModal } from '../ui/WinnerModal';
 import { useAbly } from "ably/react"
 import Ably from "ably"
+import { useDisclosure } from '@nextui-org/react';
 
 interface TicTacToeProps {
   gameChannelName: string | null;
+  symbol:string;
 }
-
 
 class GameData {
   id: string;
@@ -23,29 +24,37 @@ class GameData {
   }
 }
 
-const TicTacToe: NextPage<TicTacToeProps> = ({gameChannelName} ) => {
+const TicTacToe: NextPage<TicTacToeProps> = ({ symbol,gameChannelName }) => {
+
   const ably=useAbly();
   const [playerSymbol, setPlayerSymbol] = useState<string>('');
   const [newGame, setNewGame] = useState<boolean>(false);
   const [squares, setSquares] = useState<Array<any>>(Array(9).fill(null));
   const [currentPlayer, setCurrentPlayer] = useState<string|null>(null);
   const [gameChannel, setGameChannel] = useState<Ably.Types.RealtimeChannelPromise | null>(null);
+
   useEffect(() => {
+
     if (gameChannelName) {
       const gameChannel = ably.channels.get(gameChannelName);    
       setGameChannel(gameChannel);};
 
     const onMove = (message:Ably.Types.Message) => {
-      if (message.name === 'move') {
-        setSquares(message.data.squares);
-        setCurrentPlayer(message.data.nextPlayer);
-      }
+      console.log("-------------")
+      console.log(currentPlayer, "made a move")
+      setSquares(message.data.squares);
+      setCurrentPlayer(message.data.nextPlayer);
+      console.log(currentPlayer, "is Next")
+      console.log("-------------")
     };
+
     gameChannel?.subscribe('move',onMove);
 
     if (!currentPlayer) {
       const firstPlayer = Math.random() < 0.5 ? 'X' : 'O';
+      console.log(firstPlayer," goes first")
       setCurrentPlayer(firstPlayer);
+      handleNewGame();
       gameChannel?.publish('move', { squares, nextPlayer: firstPlayer });
     }
 
@@ -54,37 +63,10 @@ const TicTacToe: NextPage<TicTacToeProps> = ({gameChannelName} ) => {
     };
   }, [gameChannelName, currentPlayer]);
   
-
   let winner = calculateWinner(squares);
-  // handle Choose player
-  function handlePlayerX() {
-    setPlayerSymbol('X');
-  }
 
-  function handlePlayerO() {
-    setPlayerSymbol('O');
-
-  }
-
-    //// It will Handle which Icon will apppear on Board on cliking  on the Squares
-  function handlePlayer(i: number) {
-
-      if (calculateWinner(squares) || squares[i]) {
-        return;
-      }
-  
-      squares[i] = playerSymbol=='X' ? "X" : "O";
-      setSquares(squares);
-      if(playerSymbol=='X'){setPlayerSymbol('O');}
-      else{setPlayerSymbol('X');}
-    }
-
-  function handleRestartGame() {
-    setSquares(Array(9).fill(null));
-  }
-  
   const handlePlayerMove = (index:number) => {
-    if (squares[index] || currentPlayer !== ably.auth.clientId) return; // Example condition: only 'X' can play
+    if (squares[index] || currentPlayer !== playerSymbol) return; // Example condition: only 'X' can play
     const newSquares = [...squares];
     newSquares[index] = currentPlayer;
     setSquares(newSquares);
@@ -93,12 +75,13 @@ const TicTacToe: NextPage<TicTacToeProps> = ({gameChannelName} ) => {
     gameChannel?.publish('move', { squares: newSquares, nextPlayer });
   };
 
+  function handleRestartGame() {
+    setSquares(Array(9).fill(null));
+    setCurrentPlayer(null);
+  }
 
-
-  // It will handle the start Game when the player choose one of the Icon
-  // with which they want to player
   function handleNewGame() {
-    setPlayerSymbol('X');
+    setPlayerSymbol(symbol);
     setSquares(Array(9).fill(null));
     setNewGame(true);
   };
@@ -108,7 +91,7 @@ const TicTacToe: NextPage<TicTacToeProps> = ({gameChannelName} ) => {
     setSquares(Array(9).fill(null));
     setNewGame(false);
   }
-  // Calculate the winner
+
   function calculateWinner(squares: Array<any>) {
     // Total 8 winning patterens
     const winningPatterns = [
@@ -121,8 +104,6 @@ const TicTacToe: NextPage<TicTacToeProps> = ({gameChannelName} ) => {
       [0, 4, 8],
       [2, 4, 6]
     ];
-    
-
     for (let i = 0; i < winningPatterns.length; i++) {
       const [a, b, c] = winningPatterns[i];
 
@@ -132,31 +113,33 @@ const TicTacToe: NextPage<TicTacToeProps> = ({gameChannelName} ) => {
     }
     return null;
   }
-
   
   return (
-    <div className="flex min-h-screen bg-white flex-col items-center  py-2">
+    <div className="flex flex-col items-center py-2">
 
-
-      <h1 className="text-4xl md:text-6xl font-extrabold mt-4 text-blue-600 ">
+      
+      <h1 className="text-4xl md:text-6xl  mt-4">
         Tic
         {" "}
-        <span className="text-black">Tac </span>
+        <span className="">Tac </span>
         {" "}
         Toe
       </h1>
+      
+      <p>*Game may not start properly, use the restart button at the top to restart the game</p>
 
-        <Board
-          winner={winner}
-          playerSymbol={playerSymbol}
-          currentPlayer={currentPlayer}
-          squares={squares}
-          handlePlayer={handlePlayerMove}
-          handleRestartGame={handleRestartGame}
-        />
+      <Board
+        winner={winner}
+        playerSymbol={playerSymbol}
+        currentPlayer={currentPlayer}
+        squares={squares}
+        handlePlayerMove={handlePlayerMove}
+        handleRestartGame={handleRestartGame}
+      />
 
       {winner && 
         <WinnerModal
+          handleRestartGame={handleRestartGame}
           winner={winner}
           handleQuitGame={handleQuitGame}
           handleNewGame={handleNewGame}
@@ -165,9 +148,5 @@ const TicTacToe: NextPage<TicTacToeProps> = ({gameChannelName} ) => {
     </div>
   )
 }
-
-
-
-
 
 export default TicTacToe

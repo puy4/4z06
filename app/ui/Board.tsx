@@ -2,15 +2,13 @@
 import React, { useEffect, useState } from 'react'
 import { OIcon } from './OIcon'
 import { XIcon } from './XIcon'
-import { useAbly, useChannel} from "ably/react"
-import Ably from "ably"
-import { NullLiteral } from 'typescript'
+import { Button } from '@nextui-org/react'
 
 interface PlayerProp {
   winner:string,
   playerSymbol: string,
   squares: Array<any>,
-  handlePlayer(i: number): void,
+  handlePlayerMove(i: number): void,
   currentPlayer:string|null
   handleRestartGame(): void,
 }
@@ -20,94 +18,87 @@ interface SquareProp {
   onClick(): void,
 }
 
-export const Board = ({ winner, playerSymbol, currentPlayer, handlePlayer, handleRestartGame, squares }: PlayerProp) => {
+export const Board = ({ winner, playerSymbol, currentPlayer, handlePlayerMove, handleRestartGame, squares }: PlayerProp) => {
   const [disable, setDisable] = useState(true);
   useEffect(() => {
-    (winner && playerSymbol !== currentPlayer) ? setDisable(false) : setDisable(true);
-    }, [winner, playerSymbol !== currentPlayer]);
+    (winner && playerSymbol !== currentPlayer) ? setDisable(true) : setDisable(false);
+    }, [winner, currentPlayer]);
     
   // Square Button and RenderSquare function
     function Square({ value, onClick}: SquareProp) {
       return (
-        <button className="square" onClick={onClick} disabled={disable} >
+        <Button size='lg'className="square" onClick={onClick} disabled={disable} >
           {value}
-        </button>
+        </Button>
       )
-
   }
 
   function value(i:number){
-     let value;
+     let squarevalue;
      if( squares[i] ==="X"){
-       value=<XIcon />
+      squarevalue=<XIcon />
      }else if( squares[i] === "O"){
-        value=<OIcon />
+      squarevalue=<OIcon />
      }else{
-        value=null;
+      squarevalue=null;
      }
-
-     return value;
-
+     return squarevalue;
   }
 
   const renderSquare = (i: number) => {
-    return <Square value={value(i)} onClick={() => handlePlayer(i)} />
+    return <Square value={value(i)} onClick={() => handlePlayerMove(i)} />
   }
-
-
-
 
   return (
     <div>
-      <div className="board">
-        <div className=" blue-400 w-[300px] md:[w-400px] rounded-lg flex items-center justify-center space-x-10">
-          <div>
+        <div className="w-full flex flex-row items-center justify-between">
             {playerSymbol=='X'
               ?
-              <div className="text-black bg-white text-xl px-4 py-1 w-28 rounded-lg font-medium uppercase">
-                <span className="text-black text-2xl font-bold">
+              <div className="w-full text-xl rounded-lg font-medium uppercase  center-left">
+                You are 
+                {" "}
+                <span className=" text-2xl  font-bold">
                   X
                 </span>
-                {" "}
-                Turn
               </div>
 
               :
-              <div className="text-black bg-white text-xl px-4 py-1 w-28 rounded-lg font-medium  uppercase">
-                <span className=" text-black text-2xl  font-bold">
+              <div className="w-full text-xl rounded-lg font-medium  uppercase center-left">
+                You are 
+                {" "}
+                <span className=" text-2xl  font-bold">
                   O
                 </span>
-                {" "}
-                Turn
               </div>
-
             }
-
-          </div>
-          <button onClick={handleRestartGame} className="group button px-2 py-1 hover:ring-4 hover:ring-blue-400 rounded-md bg-white hover:bg-blue-600" >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 group-hover:rotate-180 transition duration-300 eas-in  " fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+            <Button size={'sm'} variant='light' onClick={handleRestartGame} className="px-2 py-1" >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:rotate-180 transition duration-300 eas-in  " fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
-          </button>
-        </div>
-        <div className="board-row">
+          </Button>
+          </div>
+      <div className="board">
+
+        <div className="board-row space-x-2">
           {renderSquare(0)}
           {renderSquare(1)}
           {renderSquare(2)}
         </div>
 
-        <div className="board-row">
+        <div className="board-row space-x-2">
           {renderSquare(3)}
           {renderSquare(4)}
           {renderSquare(5)}
         </div>
 
-        <div className="board-row">
+        <div className="board-row space-x-2">
           {renderSquare(6)}
           {renderSquare(7)}
           {renderSquare(8)}
         </div>
       </div>
+
     </div>
+    
   )
 }

@@ -1,23 +1,68 @@
 "use client";
 
+import {Switch, SwitchProps, VisuallyHidden, useSwitch} from "@nextui-org/react";
 import {useTheme} from "next-themes";
+import {SunIcon,MoonIcon} from "@heroicons/react/24/outline"
 import { useEffect, useState } from "react";
+import React from "react";
 
-export function ThemeSwitcher() {
-  const [mounted, setMounted] = useState(false)
+
+export const ThemeSwitcher = (props:SwitchProps) => {
+    const {
+      Component, 
+      slots, 
+      isSelected, 
+      getBaseProps, 
+      getInputProps, 
+      getWrapperProps,
+
+
+    } = useSwitch(props,);
+  
   const { theme, setTheme } = useTheme()
+  const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    isSelected?(setTheme('light')):(setTheme('dark'))
+  }, [isSelected])
 
-  if(!mounted) return null
+
+
+  useEffect(() => setHasMounted(true));
+  
+
+
+
+  // this line is the key to avoid the error.
+  if (!hasMounted) {return null;}
+
 
   return (
-    <div>
-      The current theme is: {theme}
-      <button onClick={() => setTheme('light')}>Light Mode</button>
-      <button onClick={() => setTheme('dark')}>Dark Mode</button>
+
+
+    <div >
+      <Component {...getBaseProps()} 
+      >
+          <VisuallyHidden>
+            <input {...getInputProps()} />
+          </VisuallyHidden>
+          <div
+            {...getWrapperProps()}
+            className={slots.wrapper({
+              class: [
+                "w-8 h-8",
+                "flex items-center justify-center",
+                "rounded-lg bg-background " 
+              ],
+            })}      
+          >
+            {isSelected ? <SunIcon/> : <MoonIcon/>}
+
+          </div>
+      </Component>
+
     </div>
+    
   )
-};
+}
+
