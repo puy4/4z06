@@ -32,7 +32,7 @@ export const WinnerModal = ({winner, handleQuitGame, handleNewGame, handleRestar
 
   return (
       <>
-        <Modal size='xs'isOpen={winner?true:false} isDismissable={false} backdrop={"blur"} hideCloseButton={true}>
+        <Modal size='xs'isOpen={winner?true:false} isDismissable={false} backdrop={`blur`} hideCloseButton={true} placement={`center`}>
           <ModalContent >
             <>
               <ModalHeader className="justify-center">
@@ -55,7 +55,6 @@ export const WinnerModal = ({winner, handleQuitGame, handleNewGame, handleRestar
             </>
           </ModalContent>
         </Modal>
-        <p>*Game may not start properly, use the restart button at the top to restart the game</p>
         </>
   )
 }

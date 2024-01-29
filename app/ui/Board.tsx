@@ -77,21 +77,21 @@ export const Board = ({ winner, playerSymbol, currentPlayer, handlePlayerMove, h
             </svg>
           </Button>
           </div>
-      <div className="board">
+      <div className="board flex flex-col  space-y-2">
 
-        <div className="board-row space-x-2">
+        <div className="board-row flex flex-row space-x-2 ">
           {renderSquare(0)}
           {renderSquare(1)}
           {renderSquare(2)}
         </div>
 
-        <div className="board-row space-x-2">
+        <div className="board-row flex flex-row space-x-2 ">
           {renderSquare(3)}
           {renderSquare(4)}
           {renderSquare(5)}
         </div>
 
-        <div className="board-row space-x-2">
+        <div className="board-row flex flex-row space-x-2 ">
           {renderSquare(6)}
           {renderSquare(7)}
           {renderSquare(8)}
