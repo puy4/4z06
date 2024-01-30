@@ -2,12 +2,9 @@
 
 import { AblyProvider} from "ably/react"
 import * as Ably from 'ably'
-
-
-import React, { Dispatch, SetStateAction, useState }  from 'react';
+import React, { useEffect, useState }  from 'react';
 import Dashboard  from './dashboard';
 import type { NextPage } from 'next';
-
 import { useChannel } from "ably/react"
 import { MouseEventHandler, MouseEvent} from 'react'
 import { Button, Textarea, Spacer, Listbox, ListboxItem, ScrollShadow, Divider} from "@nextui-org/react";
@@ -32,29 +29,33 @@ class MessageEntry {
   }
 }
 
-
-
 const Authenticated:NextPage<AuthenticatedProps> = ({setGame,gameSelected}) => {
 
   const client = new Ably.Realtime.Promise ({ authUrl: '/token', authMethod: 'POST' });
 
+  //warning message when close or reload
+  useEffect(() => {
+    const unloadCallback = (event:BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
+      return "";
+    };
+    window.addEventListener("beforeunload", unloadCallback);
+    return () => window.removeEventListener("beforeunload", unloadCallback);
+  }, []);
+  
   return (
     <AblyProvider client={client}>
-
       <><Dashboard setGame={setGame} gameSelected={gameSelected} key="dashboard" />
       <Divider className="my-12" />
       <Chat key="chat" /></>
-
     </AblyProvider>
   )
 }
 
-
-
 const Chat = () => {
 
   const [messages, setMessages] = useState<Array<MessageEntry>>([])
-
   const { channel} = useChannel("chat", (message: Ably.Types.Message) => {
     setMessages(prev => [new MessageEntry(`${message.data.text}`,`${message.clientId}: `), ...prev])
   });
@@ -63,12 +64,10 @@ const Chat = () => {
     if(channel === null) return
     channel.publish('update', {text: `${messageText} `})
     console.log(channel.name)
-    
   }
   const handleChange = (event:React.ChangeEvent<HTMLInputElement>) => {
     setMessageText(event.target.value);
 };
-
   return (
     <div className="flex items-center flex-col flex-row">
       <h1 className={`mb-4 text-xl md:text-2xl`}>
@@ -113,8 +112,6 @@ const Chat = () => {
       </ScrollShadow>
       </div>
     </div>
-
-    
   )
 }
 

@@ -1,31 +1,18 @@
 "use client"
 import { useUser } from '@auth0/nextjs-auth0/client';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import type { NextPage } from 'next';
 import Authenticated from './Authenticated';
 import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Button} from "@nextui-org/react";
 import Link from 'next/link';
-import {Image as NextUIImage} from "@nextui-org/react";
+
 import { ThemeSwitcher } from '../components/ThemeSwitcher';
 import { GiCardJoker } from "react-icons/gi";
-import { GiTicTacToe } from "react-icons/gi";
 
 const Authentication: NextPage  = () => {
   const { user, error, isLoading } = useUser();
   const [gameSelected, setGame] = useState("");
-  
-  //warning message when close or reload
-  useEffect(() => {
-    const unloadCallback = (event:BeforeUnloadEvent) => {
-      event.preventDefault();
-      event.returnValue = "";
-      return "";
-    };
-
-    window.addEventListener("beforeunload", unloadCallback);
-    return () => window.removeEventListener("beforeunload", unloadCallback);
-  }, []);
   
   return (
     <main className="min-h-screen">
@@ -53,12 +40,8 @@ const Authentication: NextPage  = () => {
           </NavbarItem>
         </NavbarContent>
       </Navbar>
-      
     {user ? <Authenticated setGame={setGame} gameSelected={gameSelected} key="auth"/>:<UnAuth key="unauth" />}
-
     </main>
-
-
   )
 }
 

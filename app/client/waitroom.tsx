@@ -1,11 +1,13 @@
 'use client';
 import type { NextPage } from 'next';
 import React, { useState } from 'react';
-
 import Lobby from './lobby';
 import TicTacToe from './tictactoe';
+interface WaitRoomProps {
+  gameSelected: string;
 
-const WaitRoom: NextPage = () => {
+}
+const WaitRoom: NextPage<WaitRoomProps> = ({gameSelected}) => {
 
   const [gameState, setGameState] = useState('lobby'); // 'lobby' or 'game'
   const [gameChannelName, setGameChannelName] = useState<string|null>(null); // The channel of the game the player joined
@@ -22,8 +24,8 @@ const WaitRoom: NextPage = () => {
   
   return (
     gameState === 'lobby' ? 
-      <Lobby setSymbol={setSymbol} onEnterRoom={onEnterRoom}  setPlayersReady={setPlayersReady} playersReady={playersReady}  onStartGame ={onStartGame}/> : 
-      <TicTacToe symbol={symbol} gameChannelName={gameChannelName} />
+      (<Lobby setSymbol={setSymbol} onEnterRoom={onEnterRoom}  setPlayersReady={setPlayersReady} playersReady={playersReady}  onStartGame ={onStartGame}/>) : 
+      (<TicTacToe symbol={symbol} gameChannelName={gameChannelName}/>)
   );
 
   }

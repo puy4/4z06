@@ -5,23 +5,10 @@ import { Board } from '../ui/Board';
 import { WinnerModal } from '../ui/WinnerModal';
 import { useAbly } from "ably/react"
 import Ably from "ably"
-import { useDisclosure } from '@nextui-org/react';
 
 interface TicTacToeProps {
   gameChannelName: string | null;
   symbol:string;
-}
-
-class GameData {
-  id: string;
-  type: string;
-  data: string;
-
-  constructor(id: string,type: string, data: string) {
-    this.id = id;
-    this.type = type;
-    this.data = data;
-  }
 }
 
 const TicTacToe: NextPage<TicTacToeProps> = ({ symbol,gameChannelName }) => {

@@ -2,7 +2,7 @@
 import Ably from 'ably';
 import { useAbly } from "ably/react"
 import {Button, Listbox, ListboxItem, ScrollShadow } from "@nextui-org/react";
-import React,{ useState, useEffect } from 'react';
+import React,{ useState } from 'react';
 import { NextPage } from 'next';
 
 interface LobbyProps {
@@ -27,19 +27,18 @@ const Lobby: NextPage<LobbyProps>= ({setSymbol,setPlayersReady,playersReady,onEn
   const ably = useAbly();
   const lobbyChannel = ably.channels.get('tictactoe:lobby');
 
-function fetchLobbypresence() { 
-    lobbyChannel.presence.get()
-    .then(presenceData => {
-      console.log("Presence Data:", presenceData[0].clientId);
-      const rooms = processPresenceDataToGameRooms(presenceData);
-      setGameRooms(rooms);
-      console.log(rooms);
-    })
-    .catch(err => {
-      console.error('Error fetching presence data:', err);
-  });
-
-  }
+  function fetchLobbypresence() { 
+      lobbyChannel.presence.get()
+      .then(presenceData => {
+        console.log("Presence Data:", presenceData[0].clientId);
+        const rooms = processPresenceDataToGameRooms(presenceData);
+        setGameRooms(rooms);
+        console.log(rooms);
+      })
+      .catch(err => {
+        console.error('Error fetching presence data:', err);
+    });
+    }
   {/*
   useEffect(() => {
     {
@@ -78,7 +77,6 @@ function fetchLobbypresence() {
       lobbyChannel.presence.leave();
     }
     onStartGame()
-
   }
 
   return (    
@@ -137,8 +135,7 @@ const processPresenceDataToGameRooms = (presenceData: Ably.Types.PresenceMessage
     const roomName = `${presenceMessage.clientId}'s game`; 
     const owner = presenceMessage.clientId;
     const roomChannelName = `tictactoe:${presenceMessage.clientId}s-game`; 
-    gameRoomMap.set(roomName, [owner, roomChannelName]);
-    
+    gameRoomMap.set(roomName, [owner, roomChannelName]); 
   });
   return Array.from(gameRoomMap, ([name, [owner, roomChannelName]]) => ({ name, owner, roomChannelName}));
 };

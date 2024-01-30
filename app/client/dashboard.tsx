@@ -5,14 +5,12 @@ import {
   PlayIcon
 } from '@heroicons/react/24/outline';
 
-import React,{ useState } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
+import Script from "next/script";
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
 import WaitRoom from './waitroom';
-
 import {Button} from "@nextui-org/react";
 
 interface DashboardProps {
@@ -65,7 +63,7 @@ const Dashboard: NextPage<DashboardProps> = ({gameSelected,setGame}) => {
                   </Link >
               </CardContent>
               <CardActions>
-                <Button size="sm"  onClick={() => setGame("tictactoe")} className="" > 
+                <Button size="sm"  onClick={() => setGame("cribbage")} className="" > 
                 <PlayIcon height={15}/>
                 PLAY NOW</Button>
               </CardActions>
@@ -79,13 +77,9 @@ const Dashboard: NextPage<DashboardProps> = ({gameSelected,setGame}) => {
   return (
     <div> 
     {gameSelected=="" && <Choose/>}
-    {gameSelected=="tictactoe"&& <><WaitRoom/>
-    <div className="flex justify-center">
-            <div className="">
 
-    </div>
-    </div>
-    </>}
+    {gameSelected=="cribbage" && <WaitRoom gameSelected={gameSelected}/>}
+    {gameSelected=="tictactoe"&& <WaitRoom gameSelected={gameSelected}/>}
     </div>
   );
 }
